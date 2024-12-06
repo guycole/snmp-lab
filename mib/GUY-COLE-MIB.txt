@@ -1,0 +1,40 @@
+GUY-COLE-MIB DEFINITIONS ::= BEGIN
+--
+-- resides in /usr/local/share/snmp/mibs
+-- export MIBS="+GUY-COLE-MIB"
+-- snmptranslate -IR guyCole
+-- mib2c guyCole
+-- ./configure --with-mib-modules="guyCole"
+
+IMPORTS
+    OBJECT-TYPE, NOTIFICATION-TYPE, MODULE-IDENTITY,
+    Integer32, Opaque, enterprises, Counter32, Unsigned32
+        FROM SNMPv2-SMI
+
+    TEXTUAL-CONVENTION, DisplayString
+	FROM SNMPv2-TC;
+
+guyCole MODULE-IDENTITY
+    LAST-UPDATED "202412010000Z"
+    ORGANIZATION "Guy Cole"
+    CONTACT-INFO "email: guycole@gmail.com"
+    DESCRIPTION "Guy Cole Enterprise"
+    ::= { enterprises 5088 }
+
+guyColeExperimental OBJECT IDENTIFIER ::= { guyCole 1 }
+
+gcExperimentalInteger OBJECT-TYPE
+    SYNTAX	Integer32 (0..2147483647)
+    MAX-ACCESS	read-write
+    STATUS	current
+    DESCRIPTION "Integer Demo"
+    ::= { guyColeExperimental 1 }
+
+gcExperimentalString OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "String Demo"
+    ::= { guyColeExperimental 2 }
+
+END
