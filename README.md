@@ -11,28 +11,28 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
 1. ./configure (there will be interactive questions)
     1. I use SNMPv2c for development and use SNMPv3 for production.
 
-```
----------------------------------------------------------
-            Net-SNMP configuration summary:
----------------------------------------------------------
+    ```
+    ---------------------------------------------------------
+                Net-SNMP configuration summary:
+    ---------------------------------------------------------
 
-  SNMP Versions Supported:    1 2c 3
-  Building for:               linux
-  Net-SNMP Version:           5.9.4.pre2
-  Network transport support:  Callback Unix Alias TCP UDP TCPIPv6 UDPIPv6 IPv4Base SocketBase TCPBase UDPIPv4Base UDPBase IPBase IPv6Base
-  SNMPv3 Security Modules:     usm
-  Agent MIB code:            default_modules =>  snmpv3mibs mibII ucd_snmp notification notification-log-mib target agent_mibs agentx disman/event disman/schedule utilities host
-  MYSQL Trap Logging:         unavailable
-  Embedded Perl support:      enabled
-  SNMP Perl modules:          building -- embeddable
-  SNMP Python modules:        disabled
-  Crypto support from:        use_pkg_config_for_openssl
-  Authentication support:     MD5
-  Encryption support:         
-  Local DNSSEC validation:    disabled
+      SNMP Versions Supported:    1 2c 3
+      Building for:               linux
+      Net-SNMP Version:           5.9.4.pre2
+      Network transport support:  Callback Unix Alias TCP UDP TCPIPv6 UDPIPv6 IPv4Base SocketBase TCPBase UDPIPv4Base UDPBase IPBase IPv6Base
+      SNMPv3 Security Modules:     usm
+      Agent MIB code:            default_modules =>  snmpv3mibs mibII ucd_snmp notification notification-log-mib target agent_mibs agentx disman/event disman/schedule utilities host
+      MYSQL Trap Logging:         unavailable
+      Embedded Perl support:      enabled
+      SNMP Perl modules:          building -- embeddable
+      SNMP Python modules:        disabled
+      Crypto support from:        use_pkg_config_for_openssl
+      Authentication support:     MD5
+      Encryption support:         
+      Local DNSSEC validation:    disabled
 
----------------------------------------------------------
-```
+    ---------------------------------------------------------
+    ```
 
 1. make;sudo make install
 binaries to /usr/local/sbin (and /usr/local/bin)
