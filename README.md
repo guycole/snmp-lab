@@ -116,3 +116,6 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
     SNMPv2-MIB::sysORUpTime.9 = Timeticks: (0) 0:00:00.00
     SNMPv2-MIB::sysORUpTime.10 = Timeticks: (0) 0:00:00.00
     ```
+    1. If all this works out, congratulations you have built a working snmpd (agent).
+
+    
