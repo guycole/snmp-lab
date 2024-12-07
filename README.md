@@ -120,4 +120,4 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
     1. If all this works out, congratulations you have built a working snmpd (agent).
 
 ## Extend the agent to support a custom MIB
-    1.  In this section, I use a simple custom MIB to generate C stubs via [mib2c(1)](https://net-snmp.sourceforge.io/tutorial/tutorial-5/toolkit/mib2c/index.html) and then add these to snmpd, followed by verification via snmpwalk(1).
+1. In this section, I use a simple custom MIB to generate C stubs via [mib2c(1)](https://net-snmp.sourceforge.io/tutorial/tutorial-5/toolkit/mib2c/index.html) and then add these to snmpd, followed by verification via snmpwalk(1).
