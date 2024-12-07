@@ -159,14 +159,21 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
     ---------------------------------------------------------
     ```
     1. make;sudo make install
-1. Exercise the agent
-    1. Should look similar
+1. Exercise the agent 
+    1. Restart the agent with logging enabled
+        1. ```./snmpd -DguyCole -f -V``` 
+    1. Invoke snmpwalk(1)
         ```
         gsc@waifu:355>snmpwalk -v 2c -c public localhost 1.3.6.1.4.1.5088.1.1
-        MODULE-IDENTITY MACRO (lines 55..79 parsed and ignored).
-        OBJECT-IDENTITY MACRO (lines 81..103 parsed and ignored).
-        OBJECT-TYPE MACRO (lines 212..298 parsed and ignored).
-        NOTIFICATION-TYPE MACRO (lines 302..334 parsed and ignored).
-        TEXTUAL-CONVENTION MACRO (lines 8..48 parsed and ignored).
         SNMPv2-SMI::enterprises.5088.1.1.0 = INTEGER: 0
+        ```
+    1. Set fresh integer value using snmpset(1)
+        ```
+        snmpset -v 2c -c private localhost 1.3.6.1.4.1.5088.1.1.0 i 5
+        SNMPv2-SMI::enterprises.5088.1.1.0 = INTEGER: 5
+        ```
+    1. Verify update.
+        ```
+        snmpwalk -v 2c -c public localhost 1.3.6.1.4.1.5088.1.1
+        SNMPv2-SMI::enterprises.5088.1.1.0 = INTEGER: 5
         ```
