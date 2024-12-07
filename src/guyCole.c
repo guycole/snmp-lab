@@ -14,18 +14,20 @@
  * to these variables automatically, changing the values as needed.
  */
 
-long    gcExperimentalInteger = 0;  /* XXX: set default value */
+long    gcSimpleInteger = 0;  /* XXX: set default value */
 
 /*
  * Our initialization routine, called automatically by the agent 
  * (Note that the function name must match init_FILENAME()) 
  */
-void init_guyCole(void) {
+void
+init_guyCole(void)
+{
   netsnmp_handler_registration *reg;
 
-    const oid gcExperimentalInteger_oid[] = { 1,3,6,1,4,1,5088,1,1 };
-  static netsnmp_watcher_info gcExperimentalInteger_winfo;
-  static netsnmp_watcher_info gcExperimentalString_winfo;
+    const oid gcSimpleInteger_oid[] = { 1,3,6,1,4,1,5088,1,1 };
+  static netsnmp_watcher_info gcSimpleInteger_winfo;
+  static netsnmp_watcher_info gcSimpleString_winfo;
 
   /*
    * a debugging statement.  Run the agent with -DguyCole to see
@@ -49,16 +51,16 @@ void init_guyCole(void) {
      * objects will need some more specialised initialisation).
      */
     DEBUGMSGTL(("guyCole",
-                "Initializing gcExperimentalInteger scalar integer.  Default value = %d\n",
-                gcExperimentalInteger));
+                "Initializing gcSimpleInteger scalar integer.  Default value = %d\n",
+                gcSimpleInteger));
     reg = netsnmp_create_handler_registration(
-             "gcExperimentalInteger", NULL,
-              gcExperimentalInteger_oid, OID_LENGTH(gcExperimentalInteger_oid),
+             "gcSimpleInteger", NULL,
+              gcSimpleInteger_oid, OID_LENGTH(gcSimpleInteger_oid),
               HANDLER_CAN_RWRITE);
-    netsnmp_init_watcher_info(&gcExperimentalInteger_winfo, &gcExperimentalInteger, sizeof(long),
+    netsnmp_init_watcher_info(&gcSimpleInteger_winfo, &gcSimpleInteger, sizeof(long),
 			      ASN_INTEGER, WATCHER_FIXED_SIZE);
-if (netsnmp_register_watched_scalar( reg, &gcExperimentalInteger_winfo ) < 0 ) {
-        snmp_log( LOG_ERR, "Failed to register watched gcExperimentalInteger" );
+if (netsnmp_register_watched_scalar( reg, &gcSimpleInteger_winfo ) < 0 ) {
+        snmp_log( LOG_ERR, "Failed to register watched gcSimpleInteger" );
     }
 
 

@@ -1,7 +1,7 @@
-GUY-COLE-MIB DEFINITIONS ::= BEGIN
+GUY-COLE-SIMPLE-MIB DEFINITIONS ::= BEGIN
 --
 -- resides in /usr/local/share/snmp/mibs
--- export MIBS="+GUY-COLE-MIB"
+-- export MIBS="+GUY-COLE-SIMPLE-MIB"
 -- snmptranslate -IR guyCole
 -- mib2c guyCole
 -- ./configure --with-mib-modules="guyCole"
@@ -21,20 +21,20 @@ guyCole MODULE-IDENTITY
     DESCRIPTION "Guy Cole Enterprise"
     ::= { enterprises 5088 }
 
-guyColeExperimental OBJECT IDENTIFIER ::= { guyCole 1 }
+guyColeSimple OBJECT IDENTIFIER ::= { guyCole 1 }
 
-gcExperimentalInteger OBJECT-TYPE
+gcSimpleInteger OBJECT-TYPE
     SYNTAX	Integer32 (0..2147483647)
     MAX-ACCESS	read-write
     STATUS	current
     DESCRIPTION "Integer Demo"
-    ::= { guyColeExperimental 1 }
+    ::= { guyColeSimple 1 }
 
-gcExperimentalString OBJECT-TYPE
+gcSimpleString OBJECT-TYPE
     SYNTAX      DisplayString
     MAX-ACCESS  read-write
     STATUS      current
     DESCRIPTION "String Demo"
-    ::= { guyColeExperimental 2 }
+    ::= { guyColeSimple 2 }
 
 END

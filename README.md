@@ -121,3 +121,52 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
 
 ## Extend the agent to support a custom MIB
 1. In this section, I use a simple custom MIB to generate C stubs via [mib2c(1)](https://net-snmp.sourceforge.io/tutorial/tutorial-5/toolkit/mib2c/index.html) and then add these to snmpd, followed by verification via snmpwalk(1).
+
+## Demo MIB
+1. Start off simple with two scalars in [GUY-COLE-SCALAR-MIB](https://giithub.com/guycole/snmp-lab/blob/main/mib/GUY-COLE-SCALAR-MIB.txt).  
+1. Copy GUY-COLE-SCALAR-MIB.txt to /usr/local/share/snmp/mibs
+1. Seed your environment: ```export MIBS="+GUY-COLE-SIMPLE-MIB"```
+1. Validate: ```snmptranslate -IR guyColeSimple``` (should run without error).
+1. Run mib2c(1): ```mib2c guyCole```
+    1. The OID 1.3.6.1.4.1.5088 is based on my IANA enterprise assignment.
+    1. Pick "Net-SNMP style code"
+    1. Pick "magically tie integer variables to integer scalars"
+    1. Generates two files: "guyCole.h" and guyCole.c"
+1. Configure and build snmpd(8) for new MIB
+    1. Copy the generated files to the Net-SNMP directory, i.e. "net-snmp-5.9.4/agent/mibgroup"
+    1. Run configure again: ```./configure --with-mib-modules="guyCole"```
+    1. My configuration summary:
+    ```
+    ---------------------------------------------------------
+                Net-SNMP configuration summary:
+    ---------------------------------------------------------
+
+      SNMP Versions Supported:    1 2c 3
+      Building for:               linux
+      Net-SNMP Version:           5.9.4.pre2
+      Network transport support:  Callback Unix Alias TCP UDP TCPIPv6 UDPIPv6 IPv4Base SocketBase TCPBase UDPIPv4Base UDPBase IPBase IPv6Base
+      SNMPv3 Security Modules:     usm
+      Agent MIB code:            default_modules guyCole =>  snmpv3mibs mibII ucd_snmp notification notification-log-mib target agent_mibs agentx disman/event disman/schedule utilities host
+      MYSQL Trap Logging:         unavailable
+      Embedded Perl support:      enabled
+      SNMP Perl modules:          building -- embeddable
+      SNMP Python modules:        disabled
+      Crypto support from:        use_pkg_config_for_openssl
+      Authentication support:     MD5
+      Encryption support:         
+      Local DNSSEC validation:    disabled
+
+    ---------------------------------------------------------
+    ```
+    1. make;sudo make install
+1. Exercise the agent
+    1. Should look similar
+        ```
+        gsc@waifu:355>snmpwalk -v 2c -c public localhost 1.3.6.1.4.1.5088.1.1
+        MODULE-IDENTITY MACRO (lines 55..79 parsed and ignored).
+        OBJECT-IDENTITY MACRO (lines 81..103 parsed and ignored).
+        OBJECT-TYPE MACRO (lines 212..298 parsed and ignored).
+        NOTIFICATION-TYPE MACRO (lines 302..334 parsed and ignored).
+        TEXTUAL-CONVENTION MACRO (lines 8..48 parsed and ignored).
+        SNMPv2-SMI::enterprises.5088.1.1.0 = INTEGER: 0
+        ```
