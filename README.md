@@ -60,7 +60,7 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
 1. Run snmpd
     1. Must run as root for port 161
     1. I prefer to run snmpd(8) in the foreground while developing
-    1. Start the agent like ```./snmpd -f -V``
+    1. Start the agent like ```./snmpd -f -V```
     1. Should have observed the start trap (via tcpdump)
 
 1. Tail the log
@@ -130,7 +130,7 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
 1. Run mib2c(1): ```mib2c guyCole```
     1. The OID 1.3.6.1.4.1.5088 is based on my IANA enterprise assignment.
     1. Pick "Net-SNMP style code"
-    1. Pick "magically tie integer variables to integer scalars"
+    1. Pick "writing code for generic some scalars"
     1. Generates two files: "guyCole.h" and guyCole.c"
 1. Configure and build snmpd(8) for new MIB
     1. Copy the generated files to the Net-SNMP directory, i.e. "net-snmp-5.9.4/agent/mibgroup"
@@ -172,7 +172,7 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
         snmpset -v 2c -c private localhost 1.3.6.1.4.1.5088.1.1.0 i 5
         SNMPv2-SMI::enterprises.5088.1.1.0 = INTEGER: 5
         ```
-    1. Verify update.
+    1. Verify update
         ```
         snmpwalk -v 2c -c public localhost 1.3.6.1.4.1.5088.1.1
         SNMPv2-SMI::enterprises.5088.1.1.0 = INTEGER: 5
