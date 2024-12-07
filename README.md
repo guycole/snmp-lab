@@ -36,20 +36,20 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
     ```
 
 1. make;sudo make install
-    1. binaries to /usr/local/bin and /usr/local/sbin
-    1. headers to /usr/local/include/net-snmp
-    1. libraries to /usr/local/lib
-    1. mib to /usr/local/share/snmp/mibs
+    1. binaries installed in /usr/local/bin and /usr/local/sbin
+    1. headers installed in /usr/local/include/net-snmp
+    1. libraries installed in /usr/local/lib
+    1. mib installed in /usr/local/share/snmp/mibs
 
 1. configuration files for snmp utilities and snmpd
     1. configuration files reside in /usr/local/share/snmp
     1. examples:
-        snmp.conf (utilities)
-        snmpd.conf (snmpd)
+        [snmp.conf (utilities)](https://github.com/guycole/snmp-lab/blob/main/config/snmp.conf)
+        [snmpd.conf (snmpd)](https://github.com/guycole/snmp-lab/blob/main/config/snmpd.conf)
     1. copy these or use snmpconf(1) to generate your own
 
 1. almost there!
-    1. does not install as a systemd service
+    1. snmpd(8) does not install as a systemd service
     1. logs to /var/log/snmpd.log
 
 ## Test run vanilla agent
@@ -61,7 +61,7 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
     1. Must run as root for port 161
     1. I prefer to run snmpd(8) in the foreground while developing
     1. Start the agent like ```./snmpd -f -V``
-    1. Should have seen the start trap (via tcpdump)
+    1. Should have observed the start trap (via tcpdump)
 
 1. Tail the log
     1. ```tail -f /var/log/snmpd.log```
@@ -118,4 +118,6 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
     ```
     1. If all this works out, congratulations you have built a working snmpd (agent).
 
+## Extend the agent to support a custom MIB
+    1.  In this section, I use a simple custom MIB to generate C stubs via [mib2c(1)](https://net-snmp.sourceforge.io/tutorial/tutorial-5/toolkit/mib2c/index.html) and then add these to snmpd, followed by verification via snmpwalk(1).
     
