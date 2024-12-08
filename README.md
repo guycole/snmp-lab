@@ -177,3 +177,7 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
         snmpwalk -v 2c -c public localhost 1.3.6.1.4.1.5088.1.1
         SNMPv2-SMI::enterprises.5088.1.1.0 = INTEGER: 5
         ```
+
+[Net-SNMP Coding Documentation](https://net-snmp.sourceforge.io/dev/agent/index.html)
+http://www.net-snmp.org/wiki/index.php/Agent_Architecture
+https://openhpi.sourceforge.net/subagent-manual/index.html
