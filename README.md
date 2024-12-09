@@ -178,6 +178,10 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
         SNMPv2-SMI::enterprises.5088.1.1.0 = INTEGER: 5
         ```
 
+  476  snmpset -v 2c -c private localhost 1.3.6.1.4.1.5088.1.2.0 s "aaaaa"
+  477  snmpwalk -v 2c -c public localhost 1.3.6.1.4.1.5088.1
+
+
 [Net-SNMP Coding Documentation](https://net-snmp.sourceforge.io/dev/agent/index.html)
 http://www.net-snmp.org/wiki/index.php/Agent_Architecture
 https://openhpi.sourceforge.net/subagent-manual/index.html

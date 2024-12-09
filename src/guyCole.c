@@ -39,7 +39,7 @@ int handle_gcSimpleInteger(
   netsnmp_request_info         *requests) {
 
   int retval;
-  u_long undo_buffer;
+  static u_long undo_buffer;
 
   DEBUGMSGTL(("guyCole", "handleInteger\n"));
 
@@ -69,7 +69,7 @@ int handle_gcSimpleInteger(
     case MODE_SET_ACTION:
       DEBUGMSGTL(("guyCole", "set action\n"));
       gcSimpleInteger = *(requests->requestvb->val.integer);
-      DEBUGMSGTL(("guyCole", "updated integer -> %u\n", gcSimpleInteger));
+      DEBUGMSGTL(("guyCole", "updated integer -> %lu\n", gcSimpleInteger));
       break;
 
     case MODE_SET_COMMIT:
@@ -96,74 +96,61 @@ int handle_gcSimpleString(
   netsnmp_agent_request_info   *reqinfo,
   netsnmp_request_info         *requests) {
 
-  int ret;
+  int retval;
+  static u_char *undo_buffer;
 
   DEBUGMSGTL(("guyCole", "handleString\n"));
 
   switch(reqinfo->mode) {
     case MODE_GET:
+      DEBUGMSGTL(("guycole", "get\n"));
       snmp_set_var_typed_value(requests->requestvb, ASN_OCTET_STR, (u_char *) gcSimpleString, DISPLAY_STRING_MAX);
       break;
 
+    case MODE_SET_RESERVE1: 
+      DEBUGMSGTL(("guyCole", "reserve1\n"));
+      retval = netsnmp_check_vb_type(requests->requestvb, ASN_OCTET_STR);
+      if (retval != SNMP_ERR_NOERROR ) {
+	netsnmp_set_request_error(reqinfo, requests, retval);
+      }
+      break;
 
-        /*
-         * SET REQUEST
-         *
-         * multiple states in the transaction.  See:
-         * http://www.net-snmp.org/tutorial-5/toolkit/mib_module/set-actions.jpg
-         */
-        case MODE_SET_RESERVE1: 
-          DEBUGMSGTL(("guyCole", "reserve1\n"));
+    case MODE_SET_RESERVE2:
+      DEBUGMSGTL(("guyCole", "reserve2\n"));
+      undo_buffer = strdup(gcSimpleString);
+      if (undo_buffer == NULL) {
+	netsnmp_set_request_error(reqinfo, requests, SNMP_ERR_RESOURCEUNAVAILABLE);
+      }
+      break;
 
-                /* or you could use netsnmp_check_vb_type_and_size instead */
-            ret = netsnmp_check_vb_type(requests->requestvb, ASN_OCTET_STR);
-            if ( ret != SNMP_ERR_NOERROR ) {
-                netsnmp_set_request_error(reqinfo, requests, ret );
-            }
-            break;
+    case MODE_SET_FREE:
+      DEBUGMSGTL(("guyCole", "set free\n"));
+      free(undo_buffer);
+      break;
 
-        case MODE_SET_RESERVE2:
-            DEBUGMSGTL(("guyCole", "reserve2\n"));
-            /* XXX malloc "undo" storage buffer */
-            if (/* XXX if malloc, or whatever, failed: */) {
-                netsnmp_set_request_error(reqinfo, requests, SNMP_ERR_RESOURCEUNAVAILABLE);
-            }
-            break;
+    case MODE_SET_ACTION:
+      DEBUGMSGTL(("guyCole", "set action\n"));
+      memset(gcSimpleString, 0, DISPLAY_STRING_MAX); 
+      memcpy(gcSimpleString, requests->requestvb->val.string, requests->requestvb->val_len);
+      DEBUGMSGTL(("guyCole", "updated string -> %s\n", gcSimpleString));
+      break;
 
-        case MODE_SET_FREE:
-            /* XXX: free resources allocated in RESERVE1 and/or
-               RESERVE2.  Something failed somewhere, and the states
-               below won't be called. */
-            break;
+    case MODE_SET_COMMIT:
+      DEBUGMSGTL(("guyCole", "set commit\n"));
+      free(undo_buffer);
+      break;
 
-        case MODE_SET_ACTION:
-            /* XXX: perform the value change here */
-            if (/* XXX: error? */) {
-                netsnmp_set_request_error(reqinfo, requests, /* some error */);
-            }
-            break;
-
-        case MODE_SET_COMMIT:
-            /* XXX: delete temporary storage */
-            if (/* XXX: error? */) {
-                /* try _really_really_ hard to never get to this point */
-                netsnmp_set_request_error(reqinfo, requests, SNMP_ERR_COMMITFAILED);
-            }
-            break;
-
-        case MODE_SET_UNDO:
-            /* XXX: UNDO and return to previous value for the object */
-            if (/* XXX: error? */) {
-                /* try _really_really_ hard to never get to this point */
-                netsnmp_set_request_error(reqinfo, requests, SNMP_ERR_UNDOFAILED);
-            }
-            break;
+    case MODE_SET_UNDO:
+      DEBUGMSGTL(("guyCole", "set undo\n"));
+      strcpy(gcSimpleString, undo_buffer);
+      free(undo_buffer);
+      break;
 
     default:
       // we should never get here
       snmp_log(LOG_ERR, "unknown mode (%d) in handle_gcSimpleString\n", reqinfo->mode);
       return SNMP_ERR_GENERR;
-    }
+  }
 
     return SNMP_ERR_NOERROR;
 }
